@@ -1,13 +1,14 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.signals import post_save
-from django.core.validators import MinValueValidator
 from django.dispatch import receiver
 
 User = get_user_model()
 
 
 class Ingredient(models.Model):
+
     name = models.CharField(
         max_length=150,
         verbose_name='Название ингредиента',
@@ -29,22 +30,29 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
+
     name = models.CharField(
-        'Имя',
-        max_length=60,
-        unique=True)
+        max_length=50,
+        unique=True,
+        verbose_name='Название тега',
+        help_text='Введите название тега',
+    )
     color = models.CharField(
-        'Цвет',
         max_length=7,
-        unique=True)
+        unique=True,
+        verbose_name='Цвет тега в формате HEX-кода',
+        help_text='Введите цвет тега в формате HEX-кода',
+    )
     slug = models.SlugField(
-        'Ссылка',
-        max_length=100,
-        unique=True)
+        max_length=50,
+        unique=True,
+        verbose_name='Уникальный слаг',
+        help_text='Введите уникальный слаг',
+    )
 
     class Meta:
-        verbose_name = 'Тэг'
-        verbose_name_plural = 'Тэги'
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
         ordering = ['-id']
 
     def __str__(self):
@@ -52,6 +60,7 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
+
     author = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
@@ -108,6 +117,7 @@ class Recipe(models.Model):
 
 
 class RecipeIngredient(models.Model):
+
     recipe = models.ForeignKey(
         to=Recipe,
         on_delete=models.CASCADE,
@@ -143,6 +153,7 @@ class RecipeIngredient(models.Model):
 
 
 class Subscribe(models.Model):
+
     user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
@@ -175,6 +186,7 @@ class Subscribe(models.Model):
 
 
 class FavoriteRecipe(models.Model):
+
     user = models.OneToOneField(
         to=User,
         on_delete=models.CASCADE,
@@ -197,7 +209,7 @@ class FavoriteRecipe(models.Model):
         ordering = ['-add_date']
 
     def __str__(self):
-        return f'У {self.user} {self.recipe} находиться в избранном'
+        return f'У {self.user} {self.recipe.name} находиться в избранном'
 
     @receiver(post_save, sender=User)
     def create_favorite_recipe(
@@ -207,6 +219,7 @@ class FavoriteRecipe(models.Model):
 
 
 class ShoppingCart(models.Model):
+
     user = models.OneToOneField(
         to=User,
         on_delete=models.CASCADE,
@@ -230,7 +243,7 @@ class ShoppingCart(models.Model):
         ordering = ['-add_date']
 
     def __str__(self):
-        return f'У {self.user} {self.recipe} находиться в списке покупок'
+        return f'У {self.user} {self.recipe.name} находиться в списке покупок'
 
     @receiver(post_save, sender=User)
     def create_shopping_cart(
