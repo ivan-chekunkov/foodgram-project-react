@@ -345,12 +345,11 @@ class RecipesViewSet(viewsets.ModelViewSet):
         Получение данных для списка покупок.
         """
 
-        shopping_cart = (
+        return (
             request.user.shopping_cart.recipe.values(
                 'ingredients__name',
                 'ingredients__measurement_unit'
             )).annotate(amount=Sum('ingredient__amount')).order_by()
-        return shopping_cart
 
     def generate_content_shopping_cart(self, shopping_cart):
         """
