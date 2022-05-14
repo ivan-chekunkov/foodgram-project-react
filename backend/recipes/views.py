@@ -51,7 +51,7 @@ class CustomUsersViewSet(UserViewSet):
     def get_queryset(self):
         if self.request.user.is_authenticated:
             is_subscribed = Exists(
-                    self.request.user.follower.filter(author=OuterRef('id')))
+                self.request.user.follower.filter(author=OuterRef('id')))
             return User.objects.annotate(
                 is_subscribed=is_subscribed
             ).prefetch_related('follower', 'following')
@@ -364,8 +364,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
         for ingredient in shopping_cart:
             content += (
                 f'{ingredient[name]}'
-                f' {ingredient[amount]}'
-                f' — ({ingredient[measurement_unit]})\r\n'
+                f'({ingredient[measurement_unit]})'
+                f' —  {ingredient[amount]}\r\n'
             )
         content += 'Благодарим вас за пользование нашим сайтом \r\n'
         content += URL_PATH
