@@ -8,9 +8,10 @@ SECRET_KEY = os.environ.get(
     default='django-insecure-c&nzzt8b)g6um2qk8c4$2msza0p0fhh^^lrp8%gv+0jz(fj5rn'
 )
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS', default='localhost')
 
 URL_PATH = 'http://foodgram'
 
