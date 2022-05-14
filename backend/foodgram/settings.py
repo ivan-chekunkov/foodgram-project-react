@@ -3,13 +3,16 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = (
-    'django-insecure-c&nzzt8b)g6um2qk8c4$2msza0p0fhh^^lrp8%gv+0jz(fj5rn'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    default='django-insecure-c&nzzt8b)g6um2qk8c4$2msza0p0fhh^^lrp8%gv+0jz(fj5rn'
 )
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+URL_PATH = 'http://foodgram'
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -28,6 +31,7 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework.authtoken',
     'sorl.thumbnail',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -60,12 +64,36 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv(
+                'DB_ENGINE',
+                default='django.db.backends.postgresql'),
+            'NAME': os.getenv(
+                'POSTGRES_DB',
+                default='postgres'),
+            'USER': os.getenv(
+                'POSTGRES_USER',
+                default='postgres'),
+            'PASSWORD': os.getenv(
+                'POSTGRES_PASSWORD',
+                default='postgres'),
+            'HOST': os.getenv(
+                'DB_HOST',
+                default='db'),
+            'PORT': os.getenv(
+                'DB_PORT',
+                default='5432'),
+        }}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -83,13 +111,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticated'
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_PAGINATION_CLASS': 'recipes.paginations.LimitPageNumberPagination',
     'PAGE_SIZE': 6
 }
 

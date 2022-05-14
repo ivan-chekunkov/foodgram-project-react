@@ -1,20 +1,19 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
-from .models import User
+User = get_user_model()
 
 
+@admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+
     list_display = (
-        'id',
-        'username',
+        'id', 'username',
         'email',
         'first_name',
         'last_name',
-        'is_staff',
+        'is_blocked',
     )
-    search_fields = ('username',)
-    list_filter = ('email', 'first_name',)
+    search_fields = ('email', 'username', 'first_name', 'last_name')
+    list_filter = ('is_blocked', 'email', 'first_name')
     empty_value_display = '-пусто-'
-
-
-admin.site.register(User, UserAdmin)
