@@ -2,6 +2,7 @@ name: foodgram-project-react workflow
 
 on: [push]
 
+jobs:
 
 
   deploy:
