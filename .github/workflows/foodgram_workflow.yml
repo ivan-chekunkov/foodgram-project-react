@@ -65,7 +65,7 @@ jobs:
           script: |
             sudo docker pull chekunkovivan/foodgram_backend:latest
             sudo docker pull chekunkovivan/foodgram_frontend:latest
-            cd infra/
+            cd foodgram-project-react/infra/
             sudo docker-compose stop
             sudo docker-compose rm backend
       - name: docker-compose up
@@ -76,7 +76,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd infra/
+            cd foodgram-project-react/infra/
             sudo touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
