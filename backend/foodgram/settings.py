@@ -13,8 +13,13 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS', default='localhost')
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '51.250.6.88',
+    'localhost',
+    'yatubeweb.sytes.net',
+    'web',
+]
 
 URL_PATH = 'http://foodgram'
 
