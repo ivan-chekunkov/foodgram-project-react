@@ -21,7 +21,7 @@ ALLOWED_HOSTS = [
     'web',
 ]
 
-URL_PATH = 'http://foodgram'
+URL_PATH = 'http://51.250.6.88'
 
 AUTH_USER_MODEL = 'users.User'
 
