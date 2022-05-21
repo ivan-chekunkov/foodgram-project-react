@@ -38,7 +38,7 @@ class Tag(models.Model):
         help_text='Введите название тега',
     )
     color = models.CharField(
-        max_length=7,
+        max_length=50,
         unique=True,
         verbose_name='Цвет тега в формате HEX-кода',
         help_text='Введите цвет тега в формате HEX-кода',

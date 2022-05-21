@@ -1,13 +1,11 @@
-from django.contrib.auth import (authenticate, get_user_model, hashers,
-                                 password_validation)
+from django.contrib.auth import authenticate, hashers, password_validation
 from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
 
 from .mixins import IsSubscribedMixin
 from .models import (FavoriteRecipe, Ingredient, Recipe, RecipeIngredient,
                      ShoppingCart, Subscribe, Tag)
-
-User = get_user_model()
+from users.models import User
 
 
 class TagSerializer(serializers.ModelSerializer):

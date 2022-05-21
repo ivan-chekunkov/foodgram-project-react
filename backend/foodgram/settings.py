@@ -21,8 +21,6 @@ ALLOWED_HOSTS = [
     'web',
 ]
 
-URL_PATH = 'http://51.250.6.88'
-
 AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
@@ -146,3 +144,21 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+URL_PATH = 'http://51.250.6.88'
+
+CONSTANT_KEY_MSG = {
+    'NOT_SUB_TO_YOURSELF': {'errors': 'Нельзя подписаться на себя'},
+    'NOT_SUB_TO_TWICE': {'errors': 'Нельзя подписаться дважды'},
+    'NOT_SUB_DELETE': {'errors': 'Нельзя отписаться от данного пользователя'},
+    'USER_NOT_FOUND': {'detail': 'Несуществующий пользователь!'},
+    'PASSWORD_OK': {'message': 'Пароль изменен!'},
+    'NOT_RECIPE': {'detail': 'Несуществующий рецепт'},
+    'NOT_FAVORITE_TO_TWICE': {'errors': 'Нельзя добавить в избранное дважды'},
+    'NOT_FAVORITE_DELETE': {'errors': 'Нельзя убрать из избранного'},
+    'NOT_SHOP_TO_TWICE': {'errors': 'Нельзя добавить в корзину дважды'},
+    'NOT_SHOP_DELETE': {'errors': 'Нельзя убрать из корзины'},
+    'SHOPPING_CART_EMPTY': {'errors': 'Корзина пуста'},
+}
+
+SHOPPING_CATR_FILENAME = 'shoppingcart.txt'

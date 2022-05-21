@@ -1,8 +1,7 @@
-from django.contrib.auth import get_user_model, hashers
-from django.db import IntegrityError
+from django.contrib.auth import hashers
 from django.db.models import Sum
 from django.db.models.expressions import Exists, OuterRef, Value
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from djoser.views import UserViewSet
@@ -10,7 +9,8 @@ from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from foodgram.settings import URL_PATH
+from foodgram.settings import (URL_PATH, CONSTANT_KEY_MSG,
+                               SHOPPING_CATR_FILENAME)
 from .filters import RecipeFilter
 from .mixins import PermissionAndPaginationMixin
 from .models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
@@ -21,24 +21,7 @@ from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           SubscriptionSerializer, TagSerializer,
                           UserCreateSerializer, UserListSerializer,
                           UserSetPasswordSerializer)
-
-User = get_user_model()
-
-CONSTANT_KEY_MSG = {
-    'NOT_SUB_TO_YOURSELF': {'errors': 'Нельзя подписаться на себя'},
-    'NOT_SUB_TO_TWICE': {'errors': 'Нельзя подписаться дважды'},
-    'NOT_SUB_DELETE': {'errors': 'Нельзя отписаться от данного пользователя'},
-    'USER_NOT_FOUND': {'detail': 'Несуществующий пользователь!'},
-    'PASSWORD_OK': {'message': 'Пароль изменен!'},
-    'NOT_RECIPE': {'detail': 'Несуществующий рецепт'},
-    'NOT_FAVORITE_TO_TWICE': {'errors': 'Нельзя добавить в избранное дважды'},
-    'NOT_FAVORITE_DELETE': {'errors': 'Нельзя убрать из избранного'},
-    'NOT_SHOP_TO_TWICE': {'errors': 'Нельзя добавить в корзину дважды'},
-    'NOT_SHOP_DELETE': {'errors': 'Нельзя убрать из корзины'},
-    'SHOPPING_CART_EMPTY': {'errors': 'Корзина пуста'},
-}
-
-SHOPPING_CATR_FILENAME = 'shoppingcart.txt'
+from users.models import User
 
 
 class CustomUsersViewSet(UserViewSet):
@@ -95,16 +78,15 @@ class CustomUsersViewSet(UserViewSet):
                 CONSTANT_KEY_MSG['NOT_SUB_TO_YOURSELF'],
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        try:
-            subscribe = Subscribe.objects.create(
-                user=request.user,
-                author=author,
-            )
-        except IntegrityError:
+        if Subscribe.objects.filter(user=request.user, author=author).exists():
             return Response(
                 CONSTANT_KEY_MSG['NOT_SUB_TO_TWICE'],
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        subscribe = Subscribe.objects.create(
+            user=request.user,
+            author=author,
+        )
         serializer = SubscriptionSerializer(
             subscribe,
             context={'request': request}
@@ -116,15 +98,15 @@ class CustomUsersViewSet(UserViewSet):
         Отписаться от пользователя.
         """
 
-        try:
+        if Subscribe.objects.filter(user=request.user, author=author).exists():
             Subscribe.objects.get(user=request.user, author=author).delete()
-        except Subscribe.DoesNotExist:
             return Response(
-                CONSTANT_KEY_MSG['NOT_SUB_DELETE'],
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_204_NO_CONTENT
             )
         return Response(
-            status=status.HTTP_204_NO_CONTENT)
+            CONSTANT_KEY_MSG['NOT_SUB_DELETE'],
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     @action(
         methods=['POST', 'DELETE', ],
@@ -137,13 +119,7 @@ class CustomUsersViewSet(UserViewSet):
         Подписка на пользователя и отписка от пользователя.
         """
 
-        try:
-            author = get_object_or_404(User, pk=id)
-        except Http404:
-            return Response(
-                CONSTANT_KEY_MSG['USER_NOT_FOUND'],
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        author = get_object_or_404(User, pk=id)
         if request.method == 'POST':
             return self.create_subscribe(request, author)
         return self.delete_subscribe(request, author)
@@ -273,13 +249,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         Добавление и удаление рецепта из избранного.
         """
 
-        try:
-            recipe = get_object_or_404(Recipe, id=pk)
-        except Http404:
-            return Response(
-                CONSTANT_KEY_MSG['NOT_RECIPE'],
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        recipe = get_object_or_404(Recipe, id=pk)
         if request.method == 'POST':
             return self.create_favorite(request, recipe)
         return self.delete_favorite(request, recipe)
@@ -329,13 +299,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         Добавление и удаление рецептов в список покупок.
         """
 
-        try:
-            recipe = get_object_or_404(Recipe, id=pk)
-        except Http404:
-            return Response(
-                CONSTANT_KEY_MSG['NOT_RECIPE'],
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        recipe = get_object_or_404(Recipe, id=pk)
         if request.method == 'POST':
             return self.add_to_shopping_cart(request, recipe)
         return self.remove_from_shopping_cart(request, recipe)

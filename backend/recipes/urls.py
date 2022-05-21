@@ -8,10 +8,10 @@ app_name = 'recipes'
 
 
 router = DefaultRouter()
-router.register(r'recipes', RecipesViewSet, basename='recipes')
-router.register(r'tags', TagsViewSet, basename='tags')
-router.register(r'ingredients', IngredientsViewSet, basename='ingredients')
-router.register(r'users', CustomUsersViewSet, basename='users')
+router.register('recipes', RecipesViewSet, basename='recipes')
+router.register('tags', TagsViewSet, basename='tags')
+router.register('ingredients', IngredientsViewSet, basename='ingredients')
+router.register('users', CustomUsersViewSet, basename='users')
 
 urlpatterns = [
     path('', include(router.urls)),
