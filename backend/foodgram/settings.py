@@ -11,14 +11,11 @@ SECRET_KEY = os.environ.get(
     default='django-insecure-c&nzzt8b)g6um2qk8c4$2msza0p0fhh^^lrp8%gv+0jz(fj5rn'
 )
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
     '51.250.6.88',
-    'localhost',
     'yatubeweb.sytes.net',
-    'web',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -75,7 +72,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR + 'db.sqlite3',
         }
     }
 else:
