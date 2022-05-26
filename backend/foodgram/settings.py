@@ -14,6 +14,8 @@ SECRET_KEY = os.environ.get(
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
     'backend',
     '51.250.6.88',
     'yatubeweb.sytes.net',
