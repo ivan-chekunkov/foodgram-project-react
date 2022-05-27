@@ -11,7 +11,7 @@ SECRET_KEY = os.environ.get(
     default='django-insecure-c&nzzt8b)g6um2qk8c4$2msza0p0fhh^^lrp8%gv+0jz(fj5rn'
 )
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
