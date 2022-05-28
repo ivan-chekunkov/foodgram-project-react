@@ -13,13 +13,8 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'backend',
-    '51.250.6.88',
-    'yatubeweb.sytes.net',
-]
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS', default='localhost').split(', ')
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -109,6 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'

@@ -23,8 +23,7 @@ mkdir infra
 - Перенести файлы docker-compose.yml и default.conf на сервер в папку infra.
 
 ```bash
-scp docker-compose.yml <username>@<server_ip>:/home/<username>/
-scp default.conf <username>@<server_ip>:/home/<username>/
+scp -r infra/ <username>@<server_ip>:/home/<username>/
 ```
 - Создайте файл .env в дериктории infra:
 
@@ -34,13 +33,14 @@ touch .env
 - Заполнить в настройках репозитория секреты .env
 
 ```python
-DB_ENGINE=
+DB_ENGINE='django.db.backends.postgresql'
 DB_NAME=
 POSTGRES_USER=
 POSTGRES_PASSWORD=
-DB_HOST=
-DB_PORT=
+DB_HOST=db
+DB_PORT='5432'
 SECRET_KEY=
+ALLOWED_HOSTS=
 ```
 
 Скопировать на сервер настройки docker-compose.yml, default.conf из папки infra.
