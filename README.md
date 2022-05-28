@@ -16,10 +16,7 @@ sudo curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
-Создайте папку infra:
-```bash
-mkdir infra
-```
+
 - Перенести файлы docker-compose.yml и default.conf на сервер в папку infra.
 
 ```bash
@@ -34,16 +31,16 @@ touch .env
 
 ```python
 DB_ENGINE='django.db.backends.postgresql'
-DB_NAME=
-POSTGRES_USER=
-POSTGRES_PASSWORD=
+DB_NAME='db'
+POSTGRES_USER='user_db'
+POSTGRES_PASSWORD='pass'
 DB_HOST=db
 DB_PORT='5432'
-SECRET_KEY=
-ALLOWED_HOSTS=
+SECRET_KEY='Key'
+ALLOWED_HOSTS='host','host2'
 ```
 
-Скопировать на сервер настройки docker-compose.yml, default.conf из папки infra.
+Запустите docker-compose.yml.
 
 ## Запуск проекта через Docker
 - В папке infra выполнить команду, что бы собрать контейнер:
