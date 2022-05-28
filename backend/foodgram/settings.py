@@ -13,8 +13,12 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS', default='localhost').split(', ')
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '51.250.6.88',
+    'backend',
+]
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -65,7 +69,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': os.getenv(
@@ -87,8 +91,13 @@ DATABASES = {
             'DB_PORT',
             default='5432'),
     }
+}"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {

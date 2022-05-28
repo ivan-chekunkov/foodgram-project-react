@@ -37,7 +37,6 @@ POSTGRES_PASSWORD='pass'
 DB_HOST=db
 DB_PORT='5432'
 SECRET_KEY='Key'
-ALLOWED_HOSTS='host','host2'
 ```
 
 Запустите docker-compose.yml.
